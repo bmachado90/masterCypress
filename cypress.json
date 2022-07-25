@@ -1,0 +1,18 @@
+{
+  "baseUrl": "https://one.network",
+  "numTestsKeptInMemory": 0,
+  "video": false,
+  "testFiles": [
+    "**/*.feature",
+    "**/*.features"
+  ],
+  "viewportWidth": 1280,
+  "viewportHeight": 800,
+  "screenshotsFolder": "cypress/snapshots/actual",
+  "trashAssetsBeforeRuns": true,
+  "env": {
+    "type": "actual",
+    "SNAPSHOT_BASE_DIRECTORY": "cypress/snapshots/base",
+    "SNAPSHOT_DIFF_DIRECTORY": "cypress/snapshots/diff"
+  }
+}

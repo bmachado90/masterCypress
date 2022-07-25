@@ -1,0 +1,90 @@
+on:
+  workflow_dispatch:
+    inputs:
+      extraParameters:
+        description: 'Extra Cypress parameters'
+        required: false
+        default: ''
+        type: string
+  push:
+    branches:
+      - master
+      - staging
+      - develop
+
+env:
+  SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
+  SAUCE_ACCESS_KEY: ${{secrets.SAUCE_ACCESS_KEY}}
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    #runs-on: [self-hosted, linux, ARM64]
+    #container: cypress/base:12.18.4
+    services:
+      saucelabs-proxy:
+        image: saucelabs/sauce-connect:latest
+        volumes:
+          - /tmp:/tmp
+        env:
+            CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+            PERSONAL_GITHUB_TOKEN: ${{secrets.PERSONAL_GITHUB_TOKEN}}
+            SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
+            SAUCE_ACCESS_KEY: ${{secrets.SAUCE_ACCESS_KEY}}
+
+    env:
+      NO_COLOR: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # - name: Write VPN Files
+      #   run: |
+      #     mkdir -p .github/vpn
+      #     printenv
+      #     echo "${{ secrets.EU2_STAGING_VPN }}" |base64 -d >> .github/vpn/openvpn-eu2-staging.ovpn
+      #     echo "${{ secrets.US1_PRD_OVPN }}" |base64 -d >> .github/vpn/openvpn-us1-prd.ovpn
+
+      - name: Install cypress dependencies
+        run : |
+          sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
+      # - name: Install Open VPN
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install apt-transport-https libtinyxml2-6
+      #     sudo wget https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub
+      #     sudo apt-key add openvpn-repo-pkg-key.pub
+      #     sudo wget -O /etc/apt/sources.list.d/openvpn3.list https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-buster.list
+      #     sudo apt-get update
+      #     sudo apt-get install -y openvpn3 dbus-x11
+
+      # - name: Start Open VPN 3
+      #   run: |
+      #     #service dbus start
+      #     openvpn3 session-start --config .github/vpn/openvpn-eu2-staging.ovpn
+      #     nslookup staging.bk.one.network
+      #     nslookup portal-gb-staging.bk.one.network
+      #     curl https://staging.bk.one.network
+      #     curl https://api-gb-staging.bk.one.network/
+
+      - run: |
+          echo This job does specify a container.
+          echo It runs in the container instead of the VM.
+        name: Run in container
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          command: npm run cypress:ci
+
+      # - name: kill vpn
+      #   if: always()
+      #   run: |
+      #     ACTIVE_SESSIONS=$(openvpn3 sessions-list | grep -i 'path' | awk '{p=index($0, ":");print $2}')
+      #     echo $ACTIVE_SESSIONS
+      #     for instance in $ACTIVE_SESSIONS; do
+      #       openvpn3 session-manage --disconnect --session-path ${instance}
+      #     done
+
+

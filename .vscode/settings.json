@@ -1,0 +1,11 @@
+{
+    "editor.quickSuggestions": {
+        "comments": "on",
+        "strings": "on",
+        "other": "on"
+    },
+    "cucumberautocomplete.steps": [
+        "cypress/integration/**/*.ts"
+    ],
+    "cucumberautocomplete.strictGherkinCompletion": true
+}

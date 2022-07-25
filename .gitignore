@@ -1,0 +1,4 @@
+node_modules
+/cypress/snapshots/actual/
+/cypress/snapshots/diff/
+/cypress/results/

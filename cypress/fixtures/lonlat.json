@@ -1,0 +1,26 @@
+{
+  "London": {
+    "longitude": -1.9888460,
+    "latitude": 52.9916798
+  },
+  "Londonderry Derry": {
+    "longitude": -7.3816848,
+    "latitude": 55.0067439
+  },
+  "20 Farringdon Street, Blackfriars, London, EC4A 4AB": {
+    "longitude": -0.1062698,
+    "latitude": 51.5154988
+  },
+  "Fordwells, Witney, OX29": {
+    "longitude": 1.5686786,
+    "latitude": 51.8218037
+  },
+  "7 Ashtree Close, Bromley, Orpington, BR6 7FH": {
+    "longitude": 0.062858,
+    "latitude": 51.3639762
+  },
+  "Chelsfield Lane, Bromley, Orpington, BR6": {
+    "longitude": 0.1208909,
+    "latitude": 51.3711071
+  }
+}

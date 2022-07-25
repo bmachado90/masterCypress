@@ -1,0 +1,66 @@
+apiVersion: v1alpha
+kind: cypress
+defaults:
+  mode: sauce
+sauce:
+  region: eu
+  concurrency: 2 # Controls how many suites are executed at the same time.
+  tunnel-name: github-action-tunnel
+  metadata:
+    name: saucectl cypress example
+    tags:
+      - e2e
+      - release team
+      - other tag
+    build: Github Run $GITHUB_RUN_ID
+docker:
+  # Affects how test files are transferred to the docker container when using the docker mode.
+  fileTransfer: copy # Choose between mount|copy.
+cypress:
+  version: 9.3.1 # See https://docs.saucelabs.com/testrunner-toolkit for a list of supported versions.
+  configFile: "cypress.json"  # We determine related files based on the location of the config file.
+# Controls what files are available in the context of a test run (unless explicitly excluded by .sauceignore).
+rootDir: ./
+suites:
+  - name: "Chrome using global mode setting" # Since the suite doesn't specify the `mode`, it'll inherit the mode specified via `defaults.mode` (see line number 3 and 4 of this config file).
+    browser: "chrome"
+    platformName: "Windows 10" # Only relevant when running a test against the sauce cloud mode.
+    screenResolution: "1920x1080"  # (optional) Only relevant when running a test against the sauce cloud mode.
+    shard: spec
+    config:
+      testFiles: [ "**/*.*" ] # Cypress native glob support.
+  - name: "chrome in docker"
+    mode: docker
+    browser: "chrome"
+    shard: spec
+    config:
+      testFiles: [ "**/*.*" ]
+
+# Controls what artifacts to fetch when the suite on Sauce Cloud has finished.
+artifacts:
+  download:
+    when: always
+    match:
+      - console.log
+    directory: ./artifacts/
+
+npm:
+  registry: https://registry.npmjs.org
+  packages:
+    "@cypress/browserify-preprocessor": "^3.0.2"
+    "@types/cypress-cucumber-preprocessor": "^4.0.1"
+    "@types/google.maps": "^3.45.6"
+    "@types/node": "8.10.56"
+    "@typescript-eslint/eslint-plugin": "^4.28.3"
+    "@typescript-eslint/parser": "^4.28.3"
+    "cypress": "^9.4.1"
+    "cypress-cucumber-preprocessor": "^4.3.0"
+    "cypress-visual-regression": "^1.5.8"
+    "eslint": "^7.30.0"
+    "eslint-config-prettier": "^8.3.0"
+    "eslint-plugin-cypress": "^2.11.3"
+    "eslint-plugin-import": "^2.23.4"
+    "eslint-plugin-prettier": "^3.4.0"
+    "prettier": "^2.3.2"
+    "typescript": "^4.3.5"
+

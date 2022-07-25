@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+DIR="$(command cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if [ "${OS}" == "Windows_NT" ]; then
+    NVMRC_PATH="./.nvmrc"
+else
+    export NVM_DIR="$HOME/.nvm"
+    \. "$DIR/.nvm/nvm.sh" --no-use
+    NVMRC_PATH="$(nvm_find_nvmrc)"
+fi
+
+if [ -n "$NVMRC_PATH" ]; then
+    NODE_VERSION=$(cat "$NVMRC_PATH")
+else
+    echo "No .nvmrc file found" >&2
+    exit 127
+fi
+
+export NODE_VERSION
+
+if [ "${OS}" == "Windows_NT" ]; then
+    NVM_RES="$(nvm ls | grep "$NODE_VERSION" || echo "N/A")"
+else
+    NVM_RES="$(nvm version "$NODE_VERSION")"
+fi
+
+if [ "$NVM_RES" == "N/A" ]; then
+    echo "Node version $NODE_VERSION not found. Installing..."
+    nvm install "$NODE_VERSION" || exit 127
+fi
+
+nvm use "$NODE_VERSION" || exit 127
+
+exec "$@"

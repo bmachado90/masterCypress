@@ -1,0 +1,19 @@
+{
+    "include": [
+        "node_modules/cypress",
+        "cypress/**/*.ts"
+    ],
+    "compilerOptions": {
+        "target": "ES5",
+        "strict": true,
+        "lib": [
+            "ES5",
+            "DOM"
+        ],
+        "types": [
+            "cypress",
+            "node",
+            "google.maps"
+        ]
+    }
+}
