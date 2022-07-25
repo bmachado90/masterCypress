@@ -14,7 +14,7 @@
     "visual-regression:run": "cypress-tags run --quiet --env TAGS='@visual and not @ignore',type=actual",
     "visual-regression:ci": "cypress-tags run --quiet --env TAGS='@visual and not @ignore',type=actual --reporter junit --reporter-options 'mochaFile=cypress/results/TEST-[hash].xml,toConsole=false'",
     "lint": "eslint --ext .ts .",
-    "cypress:ci": "cypress run --env TAGS='not @visual and not @ignore' --reporter junit --reporter-options 'mochaFile=cypress/results/TEST-[hash].xml,toConsole=false'"
+    "cypress:ci": "cypress run --env TAGS='not @visual and not @ignore' --reporter junit --reporter-options 'mochaFile=cypress/results/TEST-[hash].xml,toConsole=false' --spec 'cypress/integration/baseMap.feature' --browser chrome"
   },
   "keywords": [
     "qa"
