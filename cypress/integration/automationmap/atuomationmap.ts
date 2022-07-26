@@ -267,6 +267,7 @@ Then("the deeplink is present", (url) => {
   })
 
   Then("the {string} option is {string} on the layers-menu", (optionListName, displayed) => {
+    cy.task('log', 'URL: '+ cy.url());
     let is_element_exist = "not.exist"
 
     displayed == "displayed" ? (is_element_exist = "exist") : (is_element_exist = "not.exist")

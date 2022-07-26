@@ -19,6 +19,13 @@ module.exports = (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions)
     typescript: resolve.sync("typescript", { baseDir: config.projectRoot }),
   }
 
+  on('task', {
+    log (message) {
+      console.log(message)
+      return null
+    }
+  })
+
   on("file:preprocessor", cucumber(options))
 
   getCompareSnapshotsPlugin(on, config)
