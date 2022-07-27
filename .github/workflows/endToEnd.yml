@@ -76,7 +76,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          command: npm run cypress:ci
+          command: npm run cypress:ci -- --spec 'cypress/integration/baseMap.feature'
 
       # - name: kill vpn
       #   if: always()
