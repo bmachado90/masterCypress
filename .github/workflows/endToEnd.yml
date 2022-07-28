@@ -6,7 +6,7 @@ on:
         required: false
         default: 'false'
         type: choice
-        options:
+        options:        
         - baseMap.feature
         - auth.feature
   push:
@@ -80,7 +80,7 @@ jobs:
         if: ${{ inputs.extraParameters }} == true
         uses: cypress-io/github-action@v4
         with:
-          command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/'+${{ inputs.extraParameters }}
+          command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/${{ inputs.extraParameters }}'
           record: true
         env:
            CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
