@@ -4,8 +4,11 @@ on:
       extraParameters:
         description: 'Extra Cypress parameters'
         required: false
-        default: ''
-        type: string
+        default: 'false'
+        type: choice
+        options:
+        - baseMap.feature
+        - auth.feature
   push:
     branches:
       - master
@@ -73,10 +76,25 @@ jobs:
           echo It runs in the container instead of the VM.
         name: Run in container
 
-      - name: Cypress run
+      - name: Cypress run option selected
+        if: ${{ inputs.extraParameters }} == true
         uses: cypress-io/github-action@v4
         with:
-          command: npm run cypress:ci -- --browser chrome ${{ inputs.extraParameters }}
+          command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/'+${{ inputs.extraParameters }}
+          record: true
+        env:
+           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+           GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
+        
+      - name: Cypress run without option selected
+        if: ${{ inputs.extraParameters }} == false
+        uses: cypress-io/github-action@v4
+        with:
+          command: npm run cypress:ci -- --browser chrome
+          record: true
+        env:
+           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+           GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
                                          
 
       # - name: kill vpn
