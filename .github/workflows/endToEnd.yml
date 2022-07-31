@@ -75,15 +75,18 @@ jobs:
           echo This job does specify a container.
           echo It runs in the container instead of the VM.
         name: Run in container
-      - name: Cypress run option selected
+      - name: Cypress run 
+        needs: [rules]  
         if: ${{ inputs.extraParameters }} == true
-        uses: cypress-io/github-action@v4
-        with:
-          command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/${{ inputs.extraParameters }}'
-          record: true
-        env:
-           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
-           GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
+        steps:
+            name: Option selected
+            uses: cypress-io/github-action@v4
+            with:
+                command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/${{ inputs.extraParameters }}'
+                record: true
+            env:
+                CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+                GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
         
       - name: Cypress run without option selected
         uses: cypress-io/github-action@v4
