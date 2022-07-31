@@ -4,13 +4,17 @@ on:
       extraParameters:
         description: 'Extra Cypress parameters'
         required: false
-        default: ''
-        type: string
+        default: 'false'
+        type: choice
+        options:
+        - baseMap.feature
+        - auth.feature
   push:
     branches:
       - master
       - staging
       - develop
+      - main
 
 env:
   SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
@@ -48,7 +52,6 @@ jobs:
       - name: Install cypress dependencies
         run : |
           sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
       # - name: Install Open VPN
       #   run: |
       #     sudo apt-get update
@@ -72,16 +75,27 @@ jobs:
           echo This job does specify a container.
           echo It runs in the container instead of the VM.
         name: Run in container
-
-      - name: Cypress run
+      - name: Cypress run option selected
+        if: ${{ inputs.extraParameters }} == true
         uses: cypress-io/github-action@v4
         with:
-          command: npm run cypress:ci -- --browser chrome ${{ inputs.extraParameters }}
+          command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/${{ inputs.extraParameters }}'
           record: true
         env:
-             CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
-             GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
-           
+           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+           GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
+        
+      - name: Cypress run without option selected
+        if: ${{ inputs.extraParameters }} == false
+        uses: cypress-io/github-action@v4
+        with:
+          command: npm run cypress:ci -- --browser chrome
+          record: true
+        env:
+           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+           GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
+                                         
+
       # - name: kill vpn
       #   if: always()
       #   run: |
@@ -90,5 +104,3 @@ jobs:
       #     for instance in $ACTIVE_SESSIONS; do
       #       openvpn3 session-manage --disconnect --session-path ${instance}
       #     done
-
-
