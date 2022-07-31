@@ -76,7 +76,7 @@ jobs:
           echo It runs in the container instead of the VM.
         name: Run in container
       - name: Cypress run 
-        if: ${{ inputs.extraParameters }} == 'true'
+        if: ${{ inputs.extraParameters }} == "true"
         uses: cypress-io/github-action@v4
         with:
             command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/${{ inputs.extraParameters }}'
@@ -86,7 +86,7 @@ jobs:
             GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
         
       - name: Cypress run without option selected
-        if: ${{ inputs.extraParameters }} == 'false'
+        if: ${{ inputs.extraParameters }} == "false"
         uses: cypress-io/github-action@v4
         with:
           command: npm run cypress:ci -- --browser chrome
