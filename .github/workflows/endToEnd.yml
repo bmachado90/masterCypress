@@ -77,6 +77,7 @@ jobs:
         name: Run in container
       - name: Cypress run option selected
         if: ${{ inputs.extraParameters }} == true
+          echo ${{ inputs.extraParameters }}
         uses: cypress-io/github-action@v4
         with:
           command: npm run cypress:ci -- --browser chrome --spec 'cypress/integration/${{ inputs.extraParameters }}'
