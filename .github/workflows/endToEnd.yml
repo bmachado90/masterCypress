@@ -86,7 +86,6 @@ jobs:
            GITHUB_TOKEN:  ${{secrets.GITHUB_TOKEN}}
         
       - name: Cypress run without option selected
-        if: ${{ inputs.extraParameters }} == false
         uses: cypress-io/github-action@v4
         with:
           command: npm run cypress:ci -- --browser chrome
